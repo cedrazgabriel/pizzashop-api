@@ -1,51 +1,56 @@
-import { faker} from '@faker-js/faker'
+/* eslint-disable drizzle/enforce-delete-with-where */
+
+import { faker } from '@faker-js/faker'
 import { users, restaurants } from './schema'
 import { db } from './connection'
 import chalk from 'chalk'
 
-//Reset database
+// Reset database
 
 await db.delete(users)
 await db.delete(restaurants)
 
 console.log(chalk.yellow('Database reset!'))
 
-//Create costumers
+// Create costumers
 await db.insert(users).values([
-    {
+  {
     name: faker.person.fullName(),
     email: faker.internet.email(),
-    role: 'customer'
-    },
-    {
+    role: 'customer',
+  },
+  {
     name: faker.person.fullName(),
     email: faker.internet.email(),
-    role: 'customer'
-    },
+    role: 'customer',
+  },
 ])
 
 console.log(chalk.yellow('Costumers created!'))
 
-//Create manager
-const [manager] =   await db.insert(users).values([
+// Create manager
+const [manager] = await db
+  .insert(users)
+  .values([
     {
-    name: faker.person.fullName(),
-    email: 'admin@admin.com',
-    role: 'manager'
-    }
-]).returning({
-    id: users.id
-})
+      name: faker.person.fullName(),
+      email: 'admin@admin.com',
+      role: 'manager',
+    },
+  ])
+  .returning({
+    id: users.id,
+  })
 
 console.log(chalk.yellow('Manager created!'))
 
-//Create restaurant 
+// Create restaurant
 await db.insert(restaurants).values([
-    {
+  {
     name: faker.company.name(),
     description: faker.lorem.paragraph(),
-    managerId: manager.id
-    },
+    managerId: manager.id,
+  },
 ])
 
 console.log(chalk.yellow('Restaurant created!'))
