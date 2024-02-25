@@ -16,26 +16,28 @@ Uma aplicação backend, utilizando Bun com Elysia. A ideia da aplicação é um
 
  1 - Instalar as dependências
 
-    ```bash
-bun install
+ ```bash
+    bun install
 ```
 
  2 - Criar o banco de dados utilizando o docker compose 
 
-  ```bash
+ ```bash
     docker compose up -d
-  ```
+```
 
  3 - Inserir as migrations dos bancos de dados.
+
  ```bash
-bun migrate
+    bun migrate
 ```
 
  4 - Inserir as migrations dos bancos de dados para ter alguns dados pré cadastrados para fins de testes da aplicação (Esse passo é opcional, mas recomendo fortemente que o siga).
 
-    ```bash
+
+ ```bash
     bun seed
-    ```
+```
  5- Para rodar a aplicação e consumir as rotas, rode o seguinte comando:
 
  ```bash
