@@ -15,6 +15,20 @@
       "when": 1708898246004,
       "tag": "0001_overconfident_cerebro",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "5",
+      "when": 1708898479602,
+      "tag": "0002_free_slipstream",
+      "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "5",
+      "when": 1708898568181,
+      "tag": "0003_keen_toxin",
+      "breakpoints": true
     }
   ]
 }
