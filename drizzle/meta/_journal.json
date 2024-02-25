@@ -1,1 +1,20 @@
-{"version":"5","dialect":"pg","entries":[]}
+{
+  "version": "5",
+  "dialect": "pg",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "5",
+      "when": 1708898210422,
+      "tag": "0000_hard_sersi",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1708898246004,
+      "tag": "0001_overconfident_cerebro",
+      "breakpoints": true
+    }
+  ]
+}
