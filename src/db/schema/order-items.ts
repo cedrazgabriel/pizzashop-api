@@ -19,7 +19,7 @@ export const ordersItems = pgTable('orders_items', {
   quantity: integer('quantity').notNull(),
 })
 
-export const orderRelations = relations(ordersItems, ({ one }) => {
+export const orderItemsRelations = relations(ordersItems, ({ one }) => {
   return {
     order: one(orders, {
       fields: [ordersItems.orderId],

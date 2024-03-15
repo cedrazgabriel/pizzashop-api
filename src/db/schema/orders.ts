@@ -28,7 +28,7 @@ export const orders = pgTable('orders', {
   createdAt: timestamp('created_at').notNull().defaultNow(),
 })
 
-export const orderRelations = relations(orders, ({ one, many }) => {
+export const ordersRelations = relations(orders, ({ one, many }) => {
   return {
     customer: one(users, {
       fields: [orders.customerId],

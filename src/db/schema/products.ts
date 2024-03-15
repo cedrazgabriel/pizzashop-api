@@ -19,7 +19,7 @@ export const products = pgTable('products', {
   updatedAt: timestamp('updated_at').notNull().defaultNow(),
 })
 
-export const orderRelations = relations(products, ({ one, many }) => {
+export const productsRelations = relations(products, ({ one, many }) => {
   return {
     restaurant: one(restaurants, {
       fields: [products.restaurantId],
