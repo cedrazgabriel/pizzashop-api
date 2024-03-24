@@ -2,28 +2,32 @@
 
 import { faker } from '@faker-js/faker'
 import {
-  users,
-  restaurants,
-  products,
+  authLinks,
   ordersItems,
   orders,
-  authLinks,
+  products,
+  restaurants,
+  users,
 } from './schema'
 import { db } from './connection'
 import chalk from 'chalk'
 import { createId } from '@paralleldrive/cuid2'
 
-// Reset database
-await db.delete(users)
-await db.delete(restaurants)
+/**
+ * Reset database
+ */
 await db.delete(ordersItems)
 await db.delete(orders)
+await db.delete(users)
+await db.delete(restaurants)
 await db.delete(products)
 await db.delete(authLinks)
 
-console.log(chalk.yellow('Database reset!'))
+console.log(chalk.yellowBright('✔️ Database reset!'))
 
-// Create costumers
+/**
+ * Create customers
+ */
 const [customer1, customer2] = await db
   .insert(users)
   .values([
@@ -40,9 +44,11 @@ const [customer1, customer2] = await db
   ])
   .returning()
 
-console.log(chalk.yellow('Costumers created!'))
+console.log(chalk.yellowBright('✔️ Created customers!'))
 
-// Create manager
+/**
+ * Create manager
+ */
 const [manager] = await db
   .insert(users)
   .values([
@@ -56,9 +62,11 @@ const [manager] = await db
     id: users.id,
   })
 
-console.log(chalk.yellow('Manager created!'))
+console.log(chalk.yellowBright('✔️ Created manager!'))
 
-// Create restaurant
+/**
+ * Create restaurant
+ */
 const [restaurant] = await db
   .insert(restaurants)
   .values([
@@ -70,37 +78,43 @@ const [restaurant] = await db
   ])
   .returning()
 
-console.log(chalk.yellow('Restaurant created!'))
+console.log(chalk.yellowBright('✔️ Created restaurant!'))
 
-// Create products
-function generateProducts() {
+function generateProduct() {
   return {
     name: faker.commerce.productName(),
     description: faker.commerce.productDescription(),
-    priceInCents: Number(faker.commerce.price({ min: 190, max: 490, dec: 0 })),
     restaurantId: restaurant.id,
+    priceInCents: Number(faker.commerce.price({ min: 190, max: 490, dec: 0 })),
   }
 }
+
+/**
+ * Create products
+ */
+
 const availableProducts = await db
   .insert(products)
   .values([
-    generateProducts(),
-    generateProducts(),
-    generateProducts(),
-    generateProducts(),
-    generateProducts(),
-    generateProducts(),
+    generateProduct(),
+    generateProduct(),
+    generateProduct(),
+    generateProduct(),
+    generateProduct(),
+    generateProduct(),
   ])
   .returning()
 
-console.log(chalk.yellow('Products created!'))
+console.log(chalk.yellowBright('✔️ Created products!'))
 
-// Create orders
-type OrdemItemsInserts = typeof ordersItems.$inferInsert
+/**
+ * Create orders
+ */
+type OrderItemInsert = typeof ordersItems.$inferInsert
 type OrderInsert = typeof orders.$inferInsert
 
-const orderItemsToInsert: OrdemItemsInserts[] = []
-const orderToInsert: OrderInsert[] = []
+const ordersItemsToInsert: OrderItemInsert[] = []
+const ordersToInsert: OrderInsert[] = []
 
 for (let i = 0; i < 200; i++) {
   const orderId = createId()
@@ -117,15 +131,15 @@ for (let i = 0; i < 200; i++) {
 
     totalInCents += orderProduct.priceInCents * quantity
 
-    orderItemsToInsert.push({
+    ordersItemsToInsert.push({
       orderId,
+      productId: orderProduct.id,
       priceInCents: orderProduct.priceInCents,
       quantity,
-      productId: orderProduct.id,
     })
   })
 
-  orderToInsert.push({
+  ordersToInsert.push({
     id: orderId,
     customerId: faker.helpers.arrayElement([customer1.id, customer2.id]),
     restaurantId: restaurant.id,
@@ -141,12 +155,11 @@ for (let i = 0; i < 200; i++) {
   })
 }
 
-await db.insert(orders).values(orderToInsert)
-console.log(chalk.yellow('Orders created!'))
+await db.insert(orders).values(ordersToInsert)
+await db.insert(ordersItems).values(ordersItemsToInsert)
 
-await db.insert(ordersItems).values(orderItemsToInsert)
-console.log(chalk.yellow('Order items created!'))
+console.log(chalk.yellowBright('✔️ Created orders!'))
 
-console.log(chalk.green('Seed completed!'))
+console.log(chalk.greenBright('Database seeded successfully!'))
 
 process.exit(0)
